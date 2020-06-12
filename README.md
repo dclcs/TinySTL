@@ -1,2 +1,25 @@
 # TinySTL
 
+## new expression
+```c++
+Complex* pc = new Complex(1, 2);
+```
+被编译器转换为
+
+```c++
+void *mem = operator new(sizeof(Complex));
+pc = static_cast<Complex*>(mem);
+pc->Complex::Complex(1, 2); //只有编译器可以直接调用ctor
+```
+`new` 本质上是调用`malloc`
+
+## delete expression
+
+```c++
+delete pc;
+```
+被编译器转换为
+```c++
+pc->~Complex(); //可以直接调用析构函数
+operator delete(pc)
+```
