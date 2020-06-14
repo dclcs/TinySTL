@@ -10,6 +10,9 @@ namespace TinySTL{
     template <class T>
     vector<T>::vector(const size_type n){
         //应该要有一个allocator 由allocator来分配
+        std::cout << "TinySTL vector allocator" << std::endl;
+        void* i = allco.allocate(n);
+
     }
 }
 

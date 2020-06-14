@@ -23,3 +23,20 @@ delete pc;
 pc->~Complex(); //可以直接调用析构函数
 operator delete(pc)
 ```
+
+
+## Allocator
+
+###### ROUNDUP 函数
+
+```c++
+static size_t ROUND_UP(size_t bytes){
+    return ( ((bytes) + __ALIGN - 1 ) & ~(__ALIGN - 1) );
+}
+```
+
+- 将bytes对齐至八个字节，其中用到取反和位运算
+
+    - 7 - 反码（0111 - 1000）
+    - 13 - 10100 & 1,1000 = 10000
+
