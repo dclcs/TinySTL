@@ -5,24 +5,84 @@
 #ifndef TINYSTL_VECTOR_H
 #define TINYSTL_VECTOR_H
 #include "../allocator/alloc.h"
+#include "../utils/construct.h"
+#include "../utils/uninitialized.h"
 #include <iostream>
+
 namespace TinySTL{
 
-
-
-    template <class T>
+    template <class T, class alloc = MyAlloc>
     class vector{
-    private:
-        T* _start;
-        T* _end;
-        static Alloc allco;
 
     public://typedef
-        typedef int size_type;
-    public:
-        vector(): _start(0), _end(0) { }
-        explicit vector(const size_type n );
+        typedef     T               value_type;
+        typedef     value_type *    iterator;
+        typedef     const T*        const_iterator;
+        typedef     value_type &    reference;
+        typedef     size_t          size_type;
+//        typedef     ptrdiff_t       difference_type;
+    protected:
+        typedef     simple_alloc<value_type, alloc> data_allocator;
+        iterator    start;
+        iterator    finish;
+        iterator    end_of_storge;
 
+        void deallocate(){
+            if(start){
+                data_allocator::deallocate(start, end_of_storge - start);
+            }
+        }
+        void fill_initialize(size_type n, const T& value){
+            start = allocate_and_fill(n, value);
+            finish = start +n;
+            end_of_storge = finish;
+        }
+    public:
+        //构造函数
+        vector(): start(0), finish(0) ,end_of_storge(0){ }
+        explicit vector(size_type n ){ fill_initialize(n, T());}
+        vector( size_type n , const T& value ) { fill_initialize(n, value);}
+        //析构函数
+
+        ~vector(){
+            destory(start, finish);
+            deallocate();
+        }
+        //接口
+        iterator begin() { return start;}
+        const_iterator begin() const { return start; }
+        iterator end(){ return finish;}
+        const_iterator end() const {return finish;}
+
+        size_type size() const
+        { return size_type( ( end() - begin() ) );}
+
+        size_type  capacity() const
+        { return size_type( end_of_storge - begin() );}
+
+        bool empty() const { return end() == begin(); }
+
+        reference operator[] (size_type n) {return *(begin() + n);}
+
+        reference front() { return *begin();}
+        reference back() {return *(end() - 1);}
+
+        //TODO:Finish push_back and pop
+        void push_back( const T& x){
+            if(finish != end_of_storge){
+                construct(finish, x);
+                ++finish;
+            }else{
+                //TODO::Implement the insert_aux
+            }
+        }
+
+    protected:
+        iterator allocate_and_fill(size_type n, const T& x){
+            iterator result = data_allocator::allocate(n);
+            uninitialized_fill_n(result, n, x);
+            return result;
+        }
     };
 }
 

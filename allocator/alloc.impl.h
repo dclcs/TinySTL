@@ -8,14 +8,14 @@
 #include <iostream>
 
 namespace TinySTL{
-    char* Alloc::start_free = 0;
-    char* Alloc::end_free = 0;
-    size_t Alloc::heap_size = 0;
-    Alloc::obj* Alloc::free_list[__NFREELISTS] = {
+    char* MyAlloc::start_free = 0;
+    char* MyAlloc::end_free = 0;
+    size_t MyAlloc::heap_size = 0;
+    MyAlloc::obj* MyAlloc::free_list[__NFREELISTS] = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     };
 
-    void *Alloc::allocate(size_t n) {
+    void *MyAlloc::allocate(size_t n) {
         obj* *my_free_list; // obj*
         obj* result;
         if( n > (size_t)__MAX_BYTES){
@@ -34,7 +34,7 @@ namespace TinySTL{
         return result;
     }
 
-    void *Alloc::refill(size_t n) {
+    void *MyAlloc::refill(size_t n) {
         int nobjs = 20;
         char *chunk = chunk_alloc(n, nobjs);
         obj* *my_free_list;
@@ -63,7 +63,7 @@ namespace TinySTL{
         return result;
     }
 
-    char *Alloc::chunk_alloc(size_t size, int &nobjs) {
+    char *MyAlloc::chunk_alloc(size_t size, int &nobjs) {
         char* result;
         size_t total_bytes = size * nobjs;
         size_t bytes_left = end_free - start_free;
@@ -111,7 +111,20 @@ namespace TinySTL{
         }
     }
 
-    void Alloc::deallocate(void *p, size_t n) {
+    void MyAlloc::deallocate(void *p, size_t n) {
+        obj* q = (obj *)p;
+        obj** my_free_list;
+
+        //大于128就调用第一级分配器
+        if(n > (size_t) __MAX_BYTES){
+            std::cout << "allocator failure" << std::endl;
+            return;
+        }
+
+        my_free_list = free_list + FREELIST_INDEX(n);
+
+        q->free_list_link = *my_free_list;
+        *my_free_list = q;
 
     }
 
