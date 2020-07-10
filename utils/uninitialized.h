@@ -6,7 +6,36 @@
 #define TINYSTL_UNINITIALIZED_H
 namespace TinySTL{
     #include "../utils/construct.h"
+    ///////////////////////////////////////////////////////////////////////////
+    //                      uninitialized_copy
+    ///////////////////////////////////////////////////////////////////////////
+    template<class InputIterator, class ForwardIterator>
+    inline ForwardIterator
+    __uninitialized_copy_aux(InputIterator first, InputIterator last, ForwardIterator result){
+        ForwardIterator cur = result;
+        for(; first != last; cur ++, first ++){
+            construct(&*cur, *first);
+        }
+        return cur;
+    }
 
+    template<class InputIterator, class ForwardIterator>
+    inline ForwardIterator
+    __uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result){
+        return __uninitialized_copy_aux(first, last, result);
+    }
+    /// \param first: 指向输入端的起始位置
+    /// \param last: 指向输入端的结束位置
+    /// \param result：指向输出端（欲初始化空间的）起始处
+    /// \return
+    template<class InputIterator, class ForwardIterator>
+    inline ForwardIterator
+    uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result){
+        return __uninitialized_copy(first, last, result /*, value_type(result)*/);
+    }
+    ///////////////////////////////////////////////////////////////////////////
+    //                      uninitialized_fill_n
+    ///////////////////////////////////////////////////////////////////////////
     template<class ForwardIterator , class Size, class T>
     inline ForwardIterator
     __uninitialized_fill_n_aux(ForwardIterator first, Size n,
@@ -21,8 +50,7 @@ namespace TinySTL{
 
     template<class ForwardIterator , class Size, class T /*, class T1*/>
     inline ForwardIterator
-    __uninitialized_fill_n(ForwardIterator first,
-                                                  Size n, const T& x/*,T1 * */){
+    __uninitialized_fill_n(ForwardIterator first,Size n, const T& x/*,T1 * */){
         //typedef typename __type_traits<T1>::is_POD_type is_POD;
         return __uninitialized_fill_n_aux(first, n, x /*, is_POD()*/);
     }
@@ -33,7 +61,9 @@ namespace TinySTL{
         return __uninitialized_fill_n(first, n, x);
     }
 
-
+    ///////////////////////////////////////////////////////////////////////////
+    //                      uninitialized_fill
+    ///////////////////////////////////////////////////////////////////////////
 
 
 

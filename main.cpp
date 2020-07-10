@@ -15,16 +15,29 @@ public:
 int main() {
     cout << "TinySTL Welcome!!" << endl;
 
-    TinySTL::vector<int*> a(10);
-    TinySTL::vector<int> b;
-    TinySTL::vector<char> c(5, 'c');
+    TinySTL::vector<int> iv(2, 9);
+    cout << "size = " << iv.size() << endl;
+    cout << "capacity = " << iv.capacity() << endl;
+    iv.push_back(1);
+    cout << "size = " << iv.size() << endl;
+    cout << "capacity = " << iv.capacity() << endl;
 
-    cout << "The TinySTL sizeof = " << sizeof(a) << endl;
+    iv.push_back(3);
+    cout << "size = " << iv.size() << endl;
+    cout << "capacity = " << iv.capacity() << endl;
 
-    cout << "The size of Vector: " << c.size()  << endl;
-    cout << "The capacity of Vector: " << c.capacity() << endl;
-    cout << "The empty of Vector:" << b.empty() << endl;
-    c[4] = 'i';
-    cout << "Print the 4th elem in c: " << c[4] << endl;
+    iv.push_back(4);
+    cout << "size = " << iv.size() << endl;
+    cout << "capacity = " << iv.capacity() << endl;
+
+    for(int i = 0 ; i < iv.size() ; i ++)
+        cout << iv[i] << ' ';
+    cout << endl;
+    TinySTL::vector<int>::iterator ivite = iv.begin() + 2;
+    auto it = iv.erase(ivite) ;
+    for(int i = 0 ; i < iv.size() ; i ++)
+        cout << iv[i] << ' ';
+    cout << endl;
+    cout << *it << endl;
     return 0;
 }

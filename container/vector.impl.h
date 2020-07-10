@@ -7,26 +7,40 @@
 
 namespace TinySTL{
 
-//    template <class T, class alloc>
-//    vector<T,alloc>::vector(const size_type n){
-//        //应该要有一个allocator 由allocator来分配
-//        start = (iterator)alloc::allocate(n);
-//        int i  = 0;
-//        for( ; i != n ; i ++){
-//            new ((T*)start + i) T (0);
-//        }
-//        finish = end_of_storge = start + n;
-//    }
-//
-//    template<class T, class alloc>
-//    vector<T, alloc>::vector(const vector::size_type n, const value_type &value) {
-//        start = (iterator)alloc::allocate(n);
-//        int i  = 0;
-//        for( ; i != n ; i ++){
-//            new ((T*)start + i) T (value);
-//        }
-//        finish = end_of_storge = start + n;
-//    }
+    template<class T, class alloc>
+    void vector<T, alloc>::insert_aux(vector::iterator position, const T &x) {
+        if(finish != end_of_storge){
+            construct(finish, *(finish - 1));
+            ++finish;
+            //copy_backward();
+        }else{
+            const size_type old_size = size();
+            const size_type len = old_size != 0 ? 2 * old_size : 1;
+            //如果大小为0， 则配置1；如果原大小不为0 则为原来的两倍
+            iterator new_start = data_allocator::allocate(len);
+            iterator new_finish = new_start;
+
+            try {
+
+                new_finish = uninitialized_copy(start, position, new_start);
+                construct(new_finish, x);
+                ++new_finish;
+                new_finish = uninitialized_copy(position, finish, new_finish);
+            }
+            catch (...) {
+                destory(new_start, new_finish);
+                data_allocator::deallocate(new_start, len);
+                throw ;
+            }
+
+            destory(begin(), end());
+            deallocate();
+
+            start = new_start;
+            finish = new_finish;
+            end_of_storge = new_start + len;
+        }
+    }
 
 
 

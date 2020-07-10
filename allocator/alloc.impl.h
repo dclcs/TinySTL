@@ -122,7 +122,6 @@ namespace TinySTL{
         }
 
         my_free_list = free_list + FREELIST_INDEX(n);
-
         q->free_list_link = *my_free_list;
         *my_free_list = q;
 

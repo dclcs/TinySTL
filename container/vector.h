@@ -7,6 +7,7 @@
 #include "../allocator/alloc.h"
 #include "../utils/construct.h"
 #include "../utils/uninitialized.h"
+#include "../algorithms/algobase.h"
 #include <iostream>
 
 namespace TinySTL{
@@ -23,10 +24,10 @@ namespace TinySTL{
 //        typedef     ptrdiff_t       difference_type;
     protected:
         typedef     simple_alloc<value_type, alloc> data_allocator;
-        iterator    start;
-        iterator    finish;
-        iterator    end_of_storge;
-
+        iterator    start;          //目前使用空间的头
+        iterator    finish;         //目前使用空间的尾
+        iterator    end_of_storge;  //可以使用空间的尾
+        void insert_aux(iterator position, const T& x);
         void deallocate(){
             if(start){
                 data_allocator::deallocate(start, end_of_storge - start);
@@ -43,7 +44,6 @@ namespace TinySTL{
         explicit vector(size_type n ){ fill_initialize(n, T());}
         vector( size_type n , const T& value ) { fill_initialize(n, value);}
         //析构函数
-
         ~vector(){
             destory(start, finish);
             deallocate();
@@ -69,14 +69,30 @@ namespace TinySTL{
 
         //TODO:Finish push_back and pop
         void push_back( const T& x){
-            if(finish != end_of_storge){
+            if(finish != end_of_storge){//还有备用空间
+
                 construct(finish, x);
                 ++finish;
-            }else{
+            }else{//无备用空间
                 //TODO::Implement the insert_aux
+                insert_aux(end(), x);
             }
         }
 
+        void pop_back(){
+            --finish;
+            destory(finish);
+        }
+
+        iterator erase(iterator position){
+            //清除某位置上的元素
+            if(position + 1 != end()){
+                copy(position + 1, finish, position);
+            }
+            --finish;
+            destory(finish);
+            return position;
+        }
     protected:
         iterator allocate_and_fill(size_type n, const T& x){
             iterator result = data_allocator::allocate(n);
@@ -84,6 +100,8 @@ namespace TinySTL{
             return result;
         }
     };
+
+
 }
 
 #include "vector.impl.h"
