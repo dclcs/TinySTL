@@ -85,7 +85,6 @@ namespace TinySTL{
         }
 
         iterator erase(iterator position){
-            //清除某位置上的元素
             if(position + 1 != end()){
                 copy(position + 1, finish, position);
             }
@@ -93,6 +92,18 @@ namespace TinySTL{
             destory(finish);
             return position;
         }
+        //[first, last)
+        iterator erase(iterator first, iterator last){
+            iterator i = copy(last, finish, first);
+            destory(i, finish);
+            finish = finish - (last - first);
+            return first;
+        }
+
+        iterator clear(){erase(begin(), end());}
+        //从position开始，插入n个元素，元素初值为x
+        void insert(iterator position, size_type n, const T& x);
+
     protected:
         iterator allocate_and_fill(size_type n, const T& x){
             iterator result = data_allocator::allocate(n);

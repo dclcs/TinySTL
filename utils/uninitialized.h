@@ -43,8 +43,10 @@ namespace TinySTL{
         ForwardIterator cur = first;
         for(; n > 0; --n, ++ cur){
 //            new ((T*)cur + n) T (x);
-            TinySTL::construct((T*)cur, x);
+//            TinySTL::construct((T*)cur, x);
+            construct(&*cur, x);
         }
+
         return cur;
     }
 
@@ -90,6 +92,7 @@ namespace TinySTL{
         ForwardIterator cur = first;
         for(; cur != last; cur ++){
 //            new ((T*)cur + i) T (0);
+            construct(&*cur, x);
         }
     }
 }
