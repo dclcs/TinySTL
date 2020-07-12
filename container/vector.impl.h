@@ -19,7 +19,6 @@ namespace TinySTL{
             //如果大小为0， 则配置1；如果原大小不为0 则为原来的两倍
             iterator new_start = data_allocator::allocate(len);
             iterator new_finish = new_start;
-
             try {
 
                 new_finish = uninitialized_copy(start, position, new_start);
