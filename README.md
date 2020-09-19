@@ -39,9 +39,20 @@ static size_t ROUND_UP(size_t bytes){
 
     - 7 - 反码（0111 - 1000）
     - 13 - 10100 & 1,1000 = 10000
+###### 辅助方法
 
+- `uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result)`
+    - 将`[first, last)`的数据复制到以`result`为起始点的空间中
 
-### Container
+- `uninitialized_fill_n(ForwardIterator first,Size n, const T& x)`
+    - 从`first`开始填充`n`个值，默认值为`x`
+
+- `uninitialized_fill(ForwardIterator first, ForwardIterator last,const T& x )`
+    - 将`[first, last)`填充值为`n`
+    
+    
+## Container
+
 ---
 
 [1.  vector](notes/vector.md)

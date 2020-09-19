@@ -2,7 +2,7 @@
 
 
 
-![vector空间示意图](vector.png)
+![vector空间示意图](img/vector.png)
 - 迭代器： `[start, end)`
 - `push_back`
     - 当`push_back`元素到`vector`尾端时要先检查是否有空闲空间
@@ -14,7 +14,7 @@
 - `erase`
     - `erase(position)`
     - `erase(first, last)`
-        ![earase](erase.png)
+        ![earase](img/erase.png)
 
 - `insert`
     - 

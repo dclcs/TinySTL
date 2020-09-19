@@ -12,7 +12,8 @@ namespace TinySTL{
         if(finish != end_of_storge){
             construct(finish, *(finish - 1));
             ++finish;
-            //copy_backward();
+            copy_backward(position, finish - 2, finish - 1);
+            *position = copy;
         }else{
             const size_type old_size = size();
             const size_type len = old_size != 0 ? 2 * old_size : 1;
