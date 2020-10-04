@@ -130,13 +130,14 @@ namespace TinySTL{
     template<class T, class alloc=MyAlloc, size_t BufSiz = 0>
     class deque{
     public:
-        typedef     T      value_type;
-        typedef     T&     reference;
+        typedef     T               value_type;
+        typedef     T&              reference;
         typedef     value_type *    pointer;
-        typedef     size_t  size_type;
-        typedef ptrdiff_t difference_type;
-    public:
+        typedef     size_t          size_type;
+        typedef     ptrdiff_t       difference_type;
+
         typedef __deque_iterator<T, T*, T&, BufSiz> iterator;
+
     protected:
         typedef simple_alloc<value_type, MyAlloc> data_allocator;
         typedef simple_alloc<pointer, MyAlloc> map_allocator;
@@ -150,14 +151,18 @@ namespace TinySTL{
 
 
     public:
+        // 构造函数
+        deque(): start() , finish() , map_size(0){}
 
-        deque(int n, const value_type& value):start(), finish(), map(0){
+        deque(int n, const value_type& value):start(), finish(), map(0), map_size(0){
             fill_initialize(n, value);
         }
+
+
 //        size_t buffer_size(){return __deque_buf_size(BufSiz, sizeof(T));}
         void fill_initialize(size_type n, value_type value);
         void create_map_and_nodes(size_type n);
-
+        size_t initial_map_size() { return 8;};
 
         iterator begin() {return start;}
         iterator end() { return finish; }
@@ -174,6 +179,7 @@ namespace TinySTL{
         size_type max_size() const {return size_type(-1);}
         bool empty() const {return finish == start;}
 
+        pointer allocate_node() {return data_allocator ::allocate(iterator::buffer_size());}
 
     };
 }

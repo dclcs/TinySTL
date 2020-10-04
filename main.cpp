@@ -3,20 +3,13 @@
 #include "container/vector.h"
 #include "container/list.h"
 #include "container/deque.h"
+#include "container/heap.h"
+#include <queue>
+#include <vector>
 using namespace std;
 #include <iterator>
 #include <list>
 #include <algorithm>
-class testClass{
-private:
-    int a;
-    int b;
-public:
-    testClass():a(0), b(0){}
-    testClass(int _a, int _b): a(_a), b(_b) {}
-};
-
-
 
 int main() {
     cout << "TinySTL Welcome!!" << endl;
@@ -58,6 +51,37 @@ int main() {
         cout << iv[i] << ' ';
     cout << endl;
 #endif
-    TinySTL::deque<int, MyAlloc, 8> ideq(20, 8);
+    TinySTL::vector<int> a (10, 9);
+    for(int i = 0 ; i < a.size() ; i ++){
+        a[i] = i;
+    }
+
+    for(int i = 0 ; i< a.size() ; i ++){
+        cout << a[i] << " ";
+    }cout << endl;
+    TinySTL::make_heap(a.begin(), a.end());
+
+    for(int i = 0 ; i< a.size() ; i ++){
+        cout << a[i] << " ";
+    }cout << endl;
+
+    a.push_back(12);
+    TinySTL::push_heap(a.begin(), a.end());
+    for(int i = 0 ; i< a.size() ; i ++){
+        cout << a[i] << " ";
+    }cout << endl;
+
+
+    TinySTL::pop_heap(a.begin(), a.end());
+    for(int i = 0 ; i< a.size() ; i ++){
+        cout << a[i] << " ";
+    }cout << endl;
+    a.pop_back();
+    TinySTL::sort_heap(a.begin(), a.end());
+    for(int i = 0 ; i< a.size() ; i ++){
+        cout << a[i] << " ";
+    }cout << endl;
+
+
     return 0;
 }
