@@ -2,7 +2,7 @@
 #include <string>
 #include "container/vector.h"
 #include "container/list.h"
-
+#include "container/deque.h"
 using namespace std;
 #include <iterator>
 #include <list>
@@ -58,26 +58,6 @@ int main() {
         cout << iv[i] << ' ';
     cout << endl;
 #endif
-    int i;
-    TinySTL::list<int> ilist;
-    cout << "size = " << ilist.size() << endl;
-
-    ilist.push_back(6);
-    ilist.push_back(2);
-    ilist.push_back(7);
-    ilist.push_back(3);
-    ilist.push_back(4);
-    cout << "size = " << ilist.size() << endl;
-
-    TinySTL::list<int>::list_iterator ite;
-    for(ite = ilist.begin(); ite != ilist.end(); ite ++){
-        cout << *ite << " ";
-    }
-    cout << endl;
-    ilist.sort();
-    for(ite = ilist.begin(); ite != ilist.end(); ite ++){
-        cout << *ite << " ";
-    }
-    cout << endl;
+    TinySTL::deque<int, MyAlloc, 8> ideq(20, 8);
     return 0;
 }

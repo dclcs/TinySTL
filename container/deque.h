@@ -131,19 +131,52 @@ namespace TinySTL{
     class deque{
     public:
         typedef     T      value_type;
+        typedef     T&     reference;
         typedef     value_type *    pointer;
         typedef     size_t  size_type;
-
+        typedef ptrdiff_t difference_type;
+    public:
+        typedef __deque_iterator<T, T*, T&, BufSiz> iterator;
     protected:
+        typedef simple_alloc<value_type, MyAlloc> data_allocator;
+        typedef simple_alloc<pointer, MyAlloc> map_allocator;
         typedef     pointer*    map_pointer;
 
     protected:
+        iterator    start;
+        iterator    finish;
         map_pointer     map;
         size_type       map_size;
 
+
+    public:
+
+        deque(int n, const value_type& value):start(), finish(), map(0){
+            fill_initialize(n, value);
+        }
+//        size_t buffer_size(){return __deque_buf_size(BufSiz, sizeof(T));}
+        void fill_initialize(size_type n, value_type value);
+        void create_map_and_nodes(size_type n);
+
+
+        iterator begin() {return start;}
+        iterator end() { return finish; }
+        reference operator[] (size_type n){
+            return start[difference_type(n)];
+        }
+        reference front() {return *start;}
+        reference back() {
+            iterator tmp = finish;
+            --tmp;
+            return *tmp;
+        }
+        size_type size() const {return finish - start;;}
+        size_type max_size() const {return size_type(-1);}
+        bool empty() const {return finish == start;}
+
+
     };
-
-
-
 }
+
+#include "deque_impl.h"
 #endif //TINYSTL_DEQUE_H
