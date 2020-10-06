@@ -70,11 +70,9 @@ namespace TinySTL{
         //TODO:Finish push_back and pop
         void push_back( const T& x){
             if(finish != end_of_storge){//还有备用空间
-
                 construct(finish, x);
                 ++finish;
             }else{//无备用空间
-                //TODO::Implement the insert_aux
                 insert_aux(end(), x);
             }
         }
@@ -82,6 +80,26 @@ namespace TinySTL{
         void pop_back(){
             --finish;
             destory(finish);
+        }
+        void resize(size_type new_size, const T& x){
+            if(new_size < size())
+                erase(begin() + new_size, end());
+            else
+                insert(end(), new_size - size() , x);
+        }
+
+        void resize(size_type new_size){resize(new_size, T());}
+
+        void reserve(size_type __n){
+            if(capacity() < __n){
+                const size_type __old_size = size();
+                iterator __tmp = allocate_and_fill(__n, start, finish);
+                destory(start, finish);
+                deallocate(start, end_of_storge - start);
+                start = __tmp;
+                finish =  __tmp + __old_size;
+                end_of_storge = start + __n;
+            }
         }
 
         iterator erase(iterator position){

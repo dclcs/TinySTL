@@ -113,5 +113,41 @@ namespace TinySTL{
         return a < b ? b : a;
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    //                          lower_bound
+    // description:
+    //              [first, last) find value binary search
+    ///////////////////////////////////////////////////////////////////////////
+
+    template<class ForwardIterator, class T, class Distance>
+    ForwardIterator __lower_bound(ForwardIterator first,
+                                  ForwardIterator last,
+                                  const T& value,
+                                  Distance*,
+                                  forward_iterator_tag){
+        Distance len = 0;
+        distance(first, last, len);
+        Distance half;
+        ForwardIterator middle;
+        while(len > 0){
+            half = len >> 1;
+            middle = first;
+            advance(middle, half);
+            if(*middle < value){
+                first = middle;
+                ++first;
+                len = len - half - 1;
+            }else
+                len = half;
+        }
+
+        return first;
+    }
+
+    template<class ForwardIterator, class T>
+    inline ForwardIterator lower_bound(ForwardIterator first, ForwardIterator last, const T& value){
+        return __lower_bound(first, last, value, distance_type(first), iterator_category(first));
+    }
 }
 #endif //TINYSTL_ALGOBASE_H

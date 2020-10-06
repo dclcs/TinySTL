@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "iterator/iterator.h"
 #include "container/vector.h"
 #include "container/list.h"
 #include "container/deque.h"
@@ -51,37 +52,6 @@ int main() {
         cout << iv[i] << ' ';
     cout << endl;
 #endif
-    TinySTL::vector<int> a (10, 9);
-    for(int i = 0 ; i < a.size() ; i ++){
-        a[i] = i;
-    }
-
-    for(int i = 0 ; i< a.size() ; i ++){
-        cout << a[i] << " ";
-    }cout << endl;
-    TinySTL::make_heap(a.begin(), a.end());
-
-    for(int i = 0 ; i< a.size() ; i ++){
-        cout << a[i] << " ";
-    }cout << endl;
-
-    a.push_back(12);
-    TinySTL::push_heap(a.begin(), a.end());
-    for(int i = 0 ; i< a.size() ; i ++){
-        cout << a[i] << " ";
-    }cout << endl;
-
-
-    TinySTL::pop_heap(a.begin(), a.end());
-    for(int i = 0 ; i< a.size() ; i ++){
-        cout << a[i] << " ";
-    }cout << endl;
-    a.pop_back();
-    TinySTL::sort_heap(a.begin(), a.end());
-    for(int i = 0 ; i< a.size() ; i ++){
-        cout << a[i] << " ";
-    }cout << endl;
-
 
     return 0;
 }
